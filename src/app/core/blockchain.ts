@@ -19,6 +19,7 @@ export interface Block {
 
 
 export class Blockchain {
+    
     private chain: Block[];
     private pendingTransactions: Transaction[];
     private difficulty: number;
