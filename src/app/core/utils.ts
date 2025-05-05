@@ -2,22 +2,22 @@ import { Block, Blockchain } from "./blockchain";
 
 export class Utils {
 
-    private BlockChain: Blockchain;
+    private blockchain: Blockchain;
     // private Blocks:Block;
     // private SelectedBlocIndex:number;
     // private isValid:boolean;
     // private MiningInProcess:boolean;
 
     constructor() {
-        this.BlockChain = new Blockchain(3);
+        this.blockchain = new Blockchain(3);
 
     }
 
 
     async AddTransaction(sender: string, recipient: string, amount: number) {
-        if (!this.BlockChain) return;
+        if (!this.blockchain) return;
         try {
-            await this.BlockChain.addTransaction(sender, recipient, amount);
+            await this.blockchain.addTransaction(sender, recipient, amount);
             console.log('Transaction added to the pool');
 
         } catch (error) {
@@ -30,11 +30,11 @@ export class Utils {
 
     async MineBlocks() {
 
-        if (!this.BlockChain) return;
+        if (!this.blockchain) return;
 
         try {
             const minerAddress = "miner-" + Math.floor(Math.random() * 1000);
-            const newBlock = await this.BlockChain.mineBlock(minerAddress);
+            const newBlock = await this.blockchain.mineBlock(minerAddress);
             console.log(`Block #${newBlock.index} mined successfully!`);
 
         } catch (error) {
@@ -45,11 +45,11 @@ export class Utils {
 
 
     async UpdateBlockChain(chain: Blockchain) {
-        if (!this.BlockChain) return;
+        if (!this.blockchain) return;
 
         try {
-            this.BlockChain = chain;
-            const isValid = this.BlockChain.validateChain()
+            this.blockchain = chain;
+            const isValid = this.blockchain.validateChain()
             if (isValid) {
                 console.log("Chain Validation Successful");
                 return true
