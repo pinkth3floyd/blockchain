@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Transaction } from '../../blockchain';
 import { Button } from '../elements/button';
 import { Input } from '../elements/input';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '../elements/card';
+import { Card, CardContent, CardHeader, CardTitle } from '../elements/card';
 
 interface TransactionPoolProps {
   pendingTransactions: Transaction[];

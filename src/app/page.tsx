@@ -1,5 +1,4 @@
 "use client"
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Block, Blockchain } from "./core/blockchain";
 import BlockchainVisualizer from "./core/ui/components/BlockchainVisualizer";
@@ -43,7 +42,7 @@ export default function Home() {
       console.error('Failed to initialize blockchain:', error);
       setLoading(false);
     }
-  }, []);
+  },[]);
 
 
 

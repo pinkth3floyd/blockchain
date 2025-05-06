@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Block, Transaction } from '../../blockchain';
+import { Block } from '../../blockchain';
 import { Badge } from '../elements/badge';
 import { Badge as BadgeIcon } from 'lucide-react';
 
