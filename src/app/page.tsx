@@ -1,6 +1,8 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Block, Blockchain } from "./core/blockchain";
+import BlockchainVisualizer from "./core/ui/components/BlockchainVisualizer";
+import { Skeleton } from "./core/ui/elements/skeleton";
 
 export default function Home() {
 
@@ -142,6 +144,31 @@ export default function Home() {
                 Difficulty: {3}
               </div>
             </div>
+          </div>
+
+
+
+          {/* blockchain visualizer */}
+
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4">
+            <h2 className="text-xl font-semibold mb-4">Blockchain</h2>
+            {!isInitialized ? (
+              <div className="flex space-x-4 overflow-x-auto pb-4">
+                {[1, 2, 3, 4].map((i) => (
+                  <Skeleton key={i} className="w-52 h-44" />
+                ))}
+              </div>
+            ) : blocks.length > 0 ? (
+              <BlockchainVisualizer 
+                blocks={blocks}
+                selectedBlockIndex={selectedBlockIndex}
+                onSelectBlock={handleSelectBlock}
+              />
+            ) : (
+              <div className="text-center py-8 text-gray-500">
+                No blocks found. Start by adding a transaction and mining a block.
+              </div>
+            )}
           </div>
 
 

@@ -15,14 +15,14 @@ const BlockchainVisualizer: React.FC<BlockchainVisualizerProps> = ({
   selectedBlockIndex,
   onSelectBlock
 }) => {
-  // Create a reversed copy of blocks to display in descending order
+
   const reversedBlocks = [...blocks].reverse();
   
   return (
     <div className="w-full overflow-x-auto pb-4">
       <div className="flex space-x-4 min-w-max">
         {reversedBlocks.map((block, reversedIndex) => {
-          // Calculate the original index to maintain correct block selection
+       
           const originalIndex = blocks.length - 1 - reversedIndex;
           const isLatest = block.index === blocks.length - 1 && block.index !== 0;
           
