@@ -213,6 +213,27 @@ export const saveBlock = async (block: Block): Promise<void> => {
       return [];
     }
   };
+
+
+  export const updateTransactionBlockHash = async (transactionId: string, blockHash: string): Promise<void> => {
+    try {
+    
+      const { error } = await supabase
+        .from('transactions')
+        .update({ block_hash: blockHash })
+        .eq('id', transactionId);
+      
+      if (error) {
+        throw error;
+      }
+      
+      console.log(`Transaction ${transactionId} updated with block hash ${blockHash} in Supabase`);
+    } catch (error) {
+      console.error('Error updating transaction block hash in Supabase:', error);
+      throw error;
+    }
+  };
+  
   
 
 
