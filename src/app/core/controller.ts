@@ -100,6 +100,53 @@ export const saveBlock = async (block: Block): Promise<void> => {
       return [];
     }
   };
+
+
+
+  export const getBlockByHash = async (hash: string): Promise<Block | null> => {
+    try {
+     
+      const { data: block, error: blockError } = await supabase
+        .from('blocks')
+        .select()
+        .eq('hash', hash)
+        .single();
+      
+      if (blockError || !block) {
+        return null;
+      }
+      
+    
+      const { data: transactions, error: txError } = await supabase
+        .from('transactions')
+        .select()
+        .eq('block_hash', hash);
+      
+      if (txError) {
+        throw txError;
+      }
+      
+      const mappedTransactions: Transaction[] = (transactions || []).map((tx) => ({
+        id: tx.id,
+        sender: tx.sender,
+        recipient: tx.recipient,
+        amount: Number(tx.amount),
+        timestamp: tx.timestamp
+      }));
+      
+      return {
+        index: block.index,
+        timestamp: block.timestamp,
+        hash: block.hash,
+        previousHash: block.previous_hash,
+        nonce: block.nonce,
+        transactions: mappedTransactions
+      };
+    } catch (error) {
+      console.error('Error getting block by hash from Supabase:', error);
+      return null;
+    }
+  };
   
   
 
