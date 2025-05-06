@@ -147,6 +147,45 @@ export const saveBlock = async (block: Block): Promise<void> => {
       return null;
     }
   };
+
+
+
+  export const savePendingTransaction = async (transaction: Transaction): Promise<void> => {
+    try {
+     
+      const { data: existingTx } = await supabase
+        .from('transactions')
+        .select('id')
+        .eq('id', transaction.id)
+        .single();
+      
+     
+      if (!existingTx) {
+      
+        const { error } = await supabase
+          .from('transactions')
+          .insert({
+            id: transaction.id,
+            sender: transaction.sender,
+            recipient: transaction.recipient,
+            amount: transaction.amount,
+            timestamp: transaction.timestamp,
+            block_hash: null 
+          });
+        
+        if (error) {
+          throw error;
+        }
+        
+        console.log(`Transaction ${transaction.id} saved as pending to Supabase`);
+      } else {
+        console.log(`Transaction ${transaction.id} already exists, skipping save`);
+      }
+    } catch (error) {
+      console.error('Error saving pending transaction to Supabase:', error);
+      throw error;
+    }
+  };
   
   
 
