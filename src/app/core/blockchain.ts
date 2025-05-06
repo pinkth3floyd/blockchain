@@ -1,5 +1,5 @@
 import { SHA256 } from 'crypto-js';
-
+import * as db from './controller';
 export interface Transaction {
     id: string;
     sender: string;
@@ -19,19 +19,48 @@ export interface Block {
 
 
 export class Blockchain {
-    
+
     private chain: Block[];
     private pendingTransactions: Transaction[];
     private difficulty: number;
+    private initialized: boolean;
 
 
     constructor(difficulty = 2) {
         this.chain = [];
         this.pendingTransactions = [];
         this.difficulty = difficulty;
+        this.initialized = false;
         this.initializeChain();
     }
 
+
+
+
+    private async initializeChain() {
+        try {
+            this.chain = await db.getAllBlocks();
+
+
+            if (this.chain.length === 0) {
+                const genesisBlock = this.createGenesisBlock();
+                this.chain = [genesisBlock];
+
+
+                await db.saveBlock(genesisBlock);
+            }
+
+            this.pendingTransactions = await db.getPendingTransactions();
+            this.initialized = true;
+
+            console.log('Blockchain initialized with', this.chain.length, 'blocks and',
+                this.pendingTransactions.length, 'pending transactions');
+
+        } catch (error) {
+            console.error('Error initializing blockchain:', error);
+            this.initialized = false;
+        }
+    }
 
     private createGenesisBlock(): Block {
         const genesisBlock = {
@@ -55,32 +84,13 @@ export class Blockchain {
         return genesisBlock;
     }
 
+    isInitialized(): boolean {
+        return this.initialized;
+      }
+
 
     calculateHash(index: number, previousHash: string, timestamp: number, transactions: Transaction[], nonce: number): string {
         return SHA256(index + previousHash + timestamp + JSON.stringify(transactions) + nonce).toString();
-    }
-
-    private async initializeChain() {
-        try {
-
-
-
-            // todo Check db for blockchain
-
-
-            if (this.chain.length === 0) {
-                const genesisBlock = this.createGenesisBlock();
-                this.chain = [genesisBlock];
-
-
-                // todo save genesis block
-            }
-
-            // todo Load pending transactions
-
-        } catch (error) {
-            console.error('Error initializing blockchain:', error);
-        }
     }
 
     getLatestBlock(): Block {
@@ -115,20 +125,23 @@ export class Blockchain {
 
         this.pendingTransactions.push(transaction);
 
-        // Save to database
-        //todo save transaction to db
-
+        await db.savePendingTransaction(transaction);
+    
         return transaction;
     }
 
 
 
     async mineBlock(minerAddress: string): Promise<Block> {
+        const pendingTransactions = [...this.pendingTransactions];
+    
+
+
         const rewardTransaction: Transaction = {
             id: this.generateTransactionId(),
             sender: "SYSTEM",
             recipient: minerAddress,
-            amount: 1, 
+            amount: 1,
             timestamp: Date.now()
         };
 
@@ -157,13 +170,11 @@ export class Blockchain {
 
         this.chain.push(newBlock);
 
-        // Save block to database
-        //   todo save block to databse
+        await db.saveBlock(newBlock);
 
-        // Update transaction block_hash references in database
-        for (const tx of this.pendingTransactions) {
-        
-        }
+        for (const tx of pendingTransactions) {
+            await db.updateTransactionBlockHash(tx.id, newBlock.hash);
+          }
 
         // Clear pending transactions
         this.pendingTransactions = [];
@@ -173,27 +184,27 @@ export class Blockchain {
 
     validateChain(): boolean {
         for (let i = 1; i < this.chain.length; i++) {
-          const currentBlock = this.chain[i];
-          const previousBlock = this.chain[i - 1];
-    
-          // Validate hash
-          if (currentBlock.hash !== this.calculateHash(
-              currentBlock.index,
-              currentBlock.previousHash,
-              currentBlock.timestamp,
-              currentBlock.transactions,
-              currentBlock.nonce
+            const currentBlock = this.chain[i];
+            const previousBlock = this.chain[i - 1];
+
+            // Validate hash
+            if (currentBlock.hash !== this.calculateHash(
+                currentBlock.index,
+                currentBlock.previousHash,
+                currentBlock.timestamp,
+                currentBlock.transactions,
+                currentBlock.nonce
             )) {
-            return false;
-          }
-    
-          // Validate chain links
-          if (currentBlock.previousHash !== previousBlock.hash) {
-            return false;
-          }
+                return false;
+            }
+
+            // Validate chain links
+            if (currentBlock.previousHash !== previousBlock.hash) {
+                return false;
+            }
         }
         return true;
-      }
+    }
 
 
 }
