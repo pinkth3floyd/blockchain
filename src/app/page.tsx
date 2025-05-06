@@ -1,8 +1,11 @@
+"use client"
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Block, Blockchain } from "./core/blockchain";
 import BlockchainVisualizer from "./core/ui/components/BlockchainVisualizer";
 import { Skeleton } from "./core/ui/elements/skeleton";
+import TransactionPool from "./core/ui/components/TransactionPool";
+import BlockDetails from "./core/ui/components/BlockDetail";
 
 export default function Home() {
 
@@ -169,6 +172,30 @@ export default function Home() {
                 No blocks found. Start by adding a transaction and mining a block.
               </div>
             )}
+          </div>
+
+
+
+          {/* main content */}
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Transaction Pool */}
+            <div className="md:col-span-1">
+              <TransactionPool 
+                pendingTransactions={blockchain?.getPendingTransactions() || []}
+                onAddTransaction={handleAddTransaction}
+                onMineBlock={handleMineBlock}
+              />
+            </div>
+            
+            {/* Block Details */}
+            <div className="md:col-span-2">
+              {!isInitialized ? (
+                <Skeleton className="w-full h-96" />
+              ) : (
+                <BlockDetails block={selectedBlock} />
+              )}
+            </div>
           </div>
 
 
