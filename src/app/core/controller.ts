@@ -187,6 +187,32 @@ export const saveBlock = async (block: Block): Promise<void> => {
     }
   };
   
+
+
+  export const getPendingTransactions = async (): Promise<Transaction[]> => {
+    try {
+     
+      const { data: transactions, error } = await supabase
+        .from('transactions')
+        .select()
+        .is('block_hash', null);
+      
+      if (error) {
+        throw error;
+      }
+      
+      return (transactions || []).map((tx) => ({
+        id: tx.id,
+        sender: tx.sender,
+        recipient: tx.recipient,
+        amount: Number(tx.amount),
+        timestamp: tx.timestamp
+      }));
+    } catch (error) {
+      console.error('Error getting pending transactions from Supabase:', error);
+      return [];
+    }
+  };
   
 
 
