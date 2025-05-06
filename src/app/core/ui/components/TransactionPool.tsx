@@ -82,14 +82,14 @@ const TransactionPool: React.FC<TransactionPoolProps> = ({
           <div className="flex space-x-2">
             <Button 
               type="submit" 
-              className="w-full" 
+              className="w-full bg-indigo-500 text-slate-900" 
               disabled={isSubmitting || !sender || !recipient || !amount}
             >
               {isSubmitting ? 'Adding...' : 'Add Transaction'}
             </Button>
             <Button 
               type="button" 
-              className="w-full" 
+              className="w-full bg-green-700 text-slate-900" 
               disabled={pendingTransactions.length === 0 || isSubmitting}
               onClick={handleMineBlockClick}
               variant="secondary"
