@@ -39,7 +39,7 @@ const BlockchainVisualizer: React.FC<BlockchainVisualizerProps> = ({
               {isLatest && (
                 <div className="absolute top-3 right-3 animate-pulse">
                   <Badge 
-                    variant="secondary"
+                    variant="default"
                     className="flex items-center gap-1 bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 shadow-lg"
                   >
                     <BadgeIcon size={14} />

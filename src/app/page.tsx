@@ -127,7 +127,8 @@ export default function Home() {
             <h1 className="text-3xl font-bold mb-2">Blockchain Explorer</h1>
             <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
               A visual demonstration of blockchain technology with blocks, transactions, and mining.
-             Powered by NextJS and Supabase
+             Powered by NextJS and Supabase 
+             <a href="https://github.com/pinkth3floyd/blockchain" target="_blank" className="ml-4 text-indigo-500">View Github</a>
             </p>
             <div className="mt-4 flex items-center justify-center gap-2">
               <div 
