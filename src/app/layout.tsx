@@ -3,8 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { TooltipProvider } from "./core/ui/elements/tooltip";
-import { Toaster } from './core/ui/elements/toaster';
-import { Toaster as Sonner } from './core/ui/elements/sonner';
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,17 +30,19 @@ export default function RootLayout({
   return (
 
     <html lang="en">
-      <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
+     
+       
+      
           <body
             className={`${geistSans.variable} ${geistMono.variable} antialiased`}
           >
+             {/* <QueryClientProvider client={queryClient}> */}
+             {/* <TooltipProvider> */}
             {children}
+            {/* </TooltipProvider> */}
+            {/* </QueryClientProvider> */}
           </body>
-        </TooltipProvider>
-      </QueryClientProvider>
+       
     </html>
   );
 }
