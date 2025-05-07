@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import TansTackProvider from './provider/TanstackProvider';
 import { TooltipProvider } from "./core/ui/elements/tooltip";
+import { Toaster } from "./core/ui/elements/toaster";
 
 
 const geistSans = Geist({
@@ -38,6 +39,7 @@ export default function RootLayout({
           >
             <TansTackProvider>
              <TooltipProvider>
+              <Toaster/>
             {children}
             </TooltipProvider>
             </TansTackProvider>
