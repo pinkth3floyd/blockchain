@@ -19,7 +19,7 @@ const BlockchainVisualizer: React.FC<BlockchainVisualizerProps> = ({
   const reversedBlocks = [...blocks].reverse();
   
   return (
-    <div className="w-full overflow-x-auto pb-4">
+    <div className="w-full overflow-x-auto pb-4 pt-2">
       <div className="flex space-x-4 min-w-max">
         {reversedBlocks.map((block, reversedIndex) => {
        

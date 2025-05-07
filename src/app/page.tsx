@@ -154,7 +154,7 @@ export default function Home() {
           {/* blockchain visualizer */}
 
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4">
-            <h2 className="text-xl font-semibold mb-4">Blockchain</h2>
+            <h2 className="text-xl font-semibold mb-4">Blockchain List {`with total ${blocks.length} blocks`}</h2>
             {!isInitialized ? (
               <div className="flex space-x-4 overflow-x-auto pb-4">
                 {[1, 2, 3, 4].map((i) => (
