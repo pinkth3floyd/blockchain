@@ -27,16 +27,16 @@ export default function RootLayout({
   const queryClient = new QueryClient();
 
   return (
-    
+
     <html lang="en">
-       <QueryClientProvider client={queryClient}>
-       <TooltipProvider>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
-      </TooltipProvider>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <body
+            className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+          >
+            {children}
+          </body>
+        </TooltipProvider>
       </QueryClientProvider>
     </html>
   );
