@@ -86,11 +86,22 @@ export class Blockchain {
 
     isInitialized(): boolean {
         return this.initialized;
-      }
+    }
 
+
+    // calculateHash(index: number, previousHash: string, timestamp: number, transactions: Transaction[], nonce: number): string {
+    //     return SHA256(index + previousHash + timestamp + JSON.stringify(transactions) + nonce).toString();
+    // }
 
     calculateHash(index: number, previousHash: string, timestamp: number, transactions: Transaction[], nonce: number): string {
-        return SHA256(index + previousHash + timestamp + JSON.stringify(transactions) + nonce).toString();
+        const transactionsStr = JSON.stringify(transactions.map(tx => ({
+            id: tx.id,
+            sender: tx.sender,
+            recipient: tx.recipient,
+            amount: Number(tx.amount),
+            timestamp: tx.timestamp
+        })));
+        return SHA256(index + previousHash + timestamp + transactionsStr + nonce).toString();
     }
 
     getLatestBlock(): Block {
@@ -126,7 +137,7 @@ export class Blockchain {
         this.pendingTransactions.push(transaction);
 
         await db.savePendingTransaction(transaction);
-    
+
         return transaction;
     }
 
@@ -134,7 +145,7 @@ export class Blockchain {
 
     async mineBlock(minerAddress: string): Promise<Block> {
         const pendingTransactions = [...this.pendingTransactions];
-    
+
 
 
         const rewardTransaction: Transaction = {
@@ -174,7 +185,7 @@ export class Blockchain {
 
         for (const tx of pendingTransactions) {
             await db.updateTransactionBlockHash(tx.id, newBlock.hash);
-          }
+        }
 
         // Clear pending transactions
         this.pendingTransactions = [];
@@ -182,7 +193,10 @@ export class Blockchain {
         return newBlock;
     }
 
-    validateChain(): boolean {
+    validateChain() {
+        if (this.chain.length <= 1) {
+            return true;
+        }
         for (let i = 1; i < this.chain.length; i++) {
             const currentBlock = this.chain[i];
             const previousBlock = this.chain[i - 1];
@@ -195,15 +209,22 @@ export class Blockchain {
                 currentBlock.transactions,
                 currentBlock.nonce
             )) {
-                return false;
+                if (currentBlock.previousHash !== previousBlock.hash) {
+                    console.error(`Chain link broken at block ${i}: previousHash doesn't match block ${i - 1}'s hash`);
+                    return false;
+                }
             }
-
-            // Validate chain links
             if (currentBlock.previousHash !== previousBlock.hash) {
-                return false;
+                const hashPrefix = currentBlock.hash.substring(0, this.difficulty);
+                const expectedPrefix = Array(this.difficulty + 1).join("0");
+                if (hashPrefix !== expectedPrefix) {
+                    console.error(`Block ${i} hash doesn't have the correct difficulty prefix`);
+                    return false;
+                }
             }
+            return true;
         }
-        return true;
+
     }
 
 
