@@ -4,6 +4,7 @@ import "./globals.css";
 import TansTackProvider from './provider/TanstackProvider';
 import { TooltipProvider } from "./core/ui/elements/tooltip";
 import { Toaster } from "./core/ui/elements/toaster";
+import {Toaster as Sonner} from './core/ui/elements/sonner';
 
 
 const geistSans = Geist({
@@ -40,6 +41,7 @@ export default function RootLayout({
             <TansTackProvider>
              <TooltipProvider>
               <Toaster/>
+              <Sonner/>
             {children}
             </TooltipProvider>
             </TansTackProvider>
