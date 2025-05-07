@@ -37,9 +37,9 @@ export default function RootLayout({
             className={`${geistSans.variable} ${geistMono.variable} antialiased`}
           >
              {/* <QueryClientProvider client={queryClient}> */}
-             {/* <TooltipProvider> */}
+             <TooltipProvider>
             {children}
-            {/* </TooltipProvider> */}
+            </TooltipProvider>
             {/* </QueryClientProvider> */}
           </body>
        
