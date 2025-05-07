@@ -193,39 +193,26 @@ export class Blockchain {
         return newBlock;
     }
 
-    validateChain() {
+    validateChain(): boolean {
         if (this.chain.length <= 1) {
-            return true;
+          return true;
         }
         for (let i = 1; i < this.chain.length; i++) {
-            const currentBlock = this.chain[i];
-            const previousBlock = this.chain[i - 1];
-
-            // Validate hash
-            if (currentBlock.hash !== this.calculateHash(
-                currentBlock.index,
-                currentBlock.previousHash,
-                currentBlock.timestamp,
-                currentBlock.transactions,
-                currentBlock.nonce
-            )) {
-                if (currentBlock.previousHash !== previousBlock.hash) {
-                    console.error(`Chain link broken at block ${i}: previousHash doesn't match block ${i - 1}'s hash`);
-                    return false;
-                }
-            }
-            if (currentBlock.previousHash !== previousBlock.hash) {
-                const hashPrefix = currentBlock.hash.substring(0, this.difficulty);
-                const expectedPrefix = Array(this.difficulty + 1).join("0");
-                if (hashPrefix !== expectedPrefix) {
-                    console.error(`Block ${i} hash doesn't have the correct difficulty prefix`);
-                    return false;
-                }
-            }
-            return true;
+          const currentBlock = this.chain[i];
+          const previousBlock = this.chain[i - 1];
+          if (currentBlock.previousHash !== previousBlock.hash) {
+            console.error(`Chain link broken at block ${i}: previousHash doesn't match block ${i-1}'s hash`);
+            return false;
+          }
+          const hashPrefix = currentBlock.hash.substring(0, this.difficulty);
+          const expectedPrefix = Array(this.difficulty + 1).join("0");
+          
+          if (hashPrefix !== expectedPrefix) {
+            console.error(`Block ${i} hash doesn't have the correct difficulty prefix`);
+            return false;
+          }
         }
-
-    }
-
+        return true;
+      }
 
 }
