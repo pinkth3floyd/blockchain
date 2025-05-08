@@ -188,29 +188,4 @@ export class MerkelBlockchain {
 }
 
 
-// const mchain = new MerkelBlockchain();
-// const tx1 = new MerkelTransaction("Alice", "Bob", 10);
-// const tx2 = new MerkelTransaction("Bob", "Charlie", 5);
-// const tx3 = new MerkelTransaction("Charlie", "Alice", 12);
-// const tx4 = new MerkelTransaction("David", "Eve", 20);
 
-
-// mchain.addBlock([tx1, tx2]);
-// mchain.addBlock([tx3, tx4]);
-
-
-// console.log("MerkelBlockchain: \n", mchain.getChain());
-
-// const latestBlock = mchain.getLatestBlock();
-// const merkleTree = new MerkleTree(latestBlock.transactions);
-// const rootHash = merkleTree.getRootHash();
-
-// console.log("\nMerkle Root: ", rootHash);
-
-// const proof = merkleTree.verifyTransaction(tx3);
-// console.log("\nMerkle Proof for tx3:", proof);
-
-// if (proof && proof.length > 0) {
-//     const isProofValid = merkleTree.checkProof(tx3.calculateHash(), proof, rootHash);
-//     console.log("\nIs Merkle Proof Valid?", isProofValid);
-// }
